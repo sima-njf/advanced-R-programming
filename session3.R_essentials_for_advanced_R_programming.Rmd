@@ -1,0 +1,216 @@
+---
+title: "session3.R_essentials_for_advanced_R_programming"
+author: "Sima"
+date: "2024-08-27"
+output: html_document
+---
+
+warm-up question:
+
+```{r setup, include=FALSE}
+install.packages("beepr")
+library(beepr)
+beepr::beep()
+k=1-11
+beepr::beep(k)
+?beep
+```
+
+
+
+```{r cars}
+for (k in 1:11) {
+  beepr::beep(k)
+  Sys.sleep(2)  # Pause for 2 seconds
+}
+```
+
+
+
+```{r pressure, echo=FALSE}
+# Loop to play each sound with a random pause between each beep
+for (k in 1:11) {
+  beepr::beep(k)
+  Sys.sleep(runif(1, min = 1, max = 5))  
+}
+
+```
+
+```{r}
+cumulative_sum_with_beep <- function(vec, sound = 1) {
+  n <- length(vec)
+  cumsum_vec <- numeric(n)
+  
+  # Loop to calculate the cumulative sum
+  for (i in 1:n) {
+    if (i == 1) {
+      cumsum_vec[i] <- vec[i]
+    } else {
+      cumsum_vec[i] <- cumsum_vec[i - 1] + vec[i]
+    }
+  }
+  
+  # Play the beep sound
+  beepr::beep(sound)
+  
+  # Create and return a matrix with original vector and cumulative sum
+  result <- cbind(vec, cumsum_vec)
+  return(result)
+}
+
+# Example usage
+numeric_vector <- c(1, 2, 3, 4, 5)
+result_matrix <- cumulative_sum_with_beep(numeric_vector, sound = 2)
+
+# Check result
+print(result_matrix)
+
+```
+
+
+
+```{r}
+data("HairEyeColor")
+HairEyeColor
+attributes(HairEyeColor)
+```
+
+
+```{r}
+y <- 1:11
+x <- 1:11
+f <- lm(y~x)
+mode(f)
+
+x <- list(1,2,3)
+x
+x[[1]]
+x[1]
+x[[1]] |> str()
+x[1] |> str()
+```
+
+
+```{r}
+x<- matrix(1:10, nrow=2)
+x
+```
+```{r}
+x[1,c(2,5)]
+```
+```{r}
+rownames(x) <- 2010:2011
+colnames(x) <- c("SLC", "LA","Milcreek","Tennesse","San")
+x[,c("SLC","San")]
+dim(x["2010",c("SLC","San")])
+##because it doesnt show 2010 so it doesnt have dimension
+x["2010",c("SLC","San")]
+dim(x[,c("SLC","San")])
+```
+
+
+```{r}
+x=1:11
+y=1:11
+f=lm(y~x)
+summary(f)
+summary.lm(f)
+predict(f)
+predict.lm(f)
+```
+```{r}
+# Name as a vector of individual letters
+name_vector <- c("S", "I", "M", "A")
+LETTERS
+positions=1:26
+names(positions)=LETTERS
+
+positions[c("S","I","M","A")]
+
+alphabet_numbers <- match(name_vector, LETTERS)
+
+# Assign names to the vector
+names(alphabet_numbers) <- name_vector
+
+# Print the result
+alphabet_numbers
+
+
+name_vector <- c("J", "O", "H", "N")
+
+# Find the position of each letter in the alphabet
+alphabet_numbers <- match(name_vector, LETTERS)
+
+# Assign names to the vector
+names(alphabet_numbers) <- name_vector
+alphabet_numbers
+
+
+```
+```{r}
+rep(0:1,times=5)
+names(tx)=1:10
+tx[tx==1]
+
+which(tx==1)
+```
+
+```{r}
+x="yes"
+if(x=="yes"){
+  print("I will take the project")
+}else{
+    print("I wont take it")
+  }
+
+```
+
+
+```{r}
+urn_1=rep(c("blue","yellow"),c(10,8))
+urn_2=rep(c("blue","yellow"),c(6,6))
+prob_blue_urn1 <- sum(urn_1 == "blue") / length(urn_1)
+
+prob_yellow_urn1 <- sum(urn_1 == "yellow") / length(urn_1)
+
+prob_blue_if_blue_added <- (sum(urn_2 == "blue") + 1) / (length(urn_2) + 1)
+
+prob_blue_if_yellow_added <- sum(urn_2 == "blue") / (length(urn_2) + 1)
+
+# Total probability of drawing a blue ball from urn 2 after one ball is added
+prob_blue_urn2 <- (prob_blue_urn1 * prob_blue_if_blue_added) + 
+                  (prob_yellow_urn1 * prob_blue_if_yellow_added)
+
+prob_blue_urn2
+
+
+
+estimate_blue_probability <- function(n_replicates = 100000) {
+  blue_draws <- 0
+  
+  for (i in 1:n_replicates) {
+    urn_1 <- rep(c("blue", "yellow"), c(10, 8))
+    drawn_marble <- sample(urn_1, 1)
+    
+    urn_2 <- c(rep(c("blue", "yellow"), c(6, 6)), drawn_marble)
+    
+    second_draw <- sample(urn_2, 1)
+    
+    # Check if the second marble is blue
+    if (second_draw == "blue") {
+      blue_draws <- blue_draws + 1
+    }
+  }
+  
+  # Estimate the probability
+  estimated_probability <- blue_draws / n_replicates
+  
+  return(estimated_probability)
+}
+
+estimated_prob <- estimate_blue_probability()
+estimated_prob
+
+
+```
+
